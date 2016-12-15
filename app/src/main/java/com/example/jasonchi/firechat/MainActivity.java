@@ -1,9 +1,13 @@
 package com.example.jasonchi.firechat;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +35,16 @@ public class MainActivity extends AppCompatActivity {
         final MyRecyclerAdapter adapter = new MyRecyclerAdapter(arrayList);
         recyclerView.setAdapter(adapter);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(MainActivity.this, AddContact.class);
+                it.putExtra("SizeOfList", String.valueOf(arrayList.size()+1));
+                startActivity(it);
+            }
+        });
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -40,12 +54,9 @@ public class MainActivity extends AppCompatActivity {
                     arrayList.add(contact);
                     adapter.notifyDataSetChanged();
                 }
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
